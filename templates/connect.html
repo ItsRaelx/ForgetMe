@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Connect to Email - ForgetMe{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Connect to Your Email</h1>
+    <p class="lead">To find services that have your data, we need to securely connect to your email account.</p>
+</section>
+
+<section class="email-connection">
+    <div class="connection-form">
+        <div class="security-note">
+            <i class="fas fa-lock"></i>
+            <p>Your credentials are used only for scanning emails and are never stored on our servers.</p>
+        </div>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        
+        <form action="/connect" method="post">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <small>We recommend using an app-specific password if your email provider supports it.</small>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="smtp_server">SMTP Server</label>
+                    <input type="text" id="smtp_server" name="smtp_server" required placeholder="smtp.example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="smtp_port">Port</label>
+                    <input type="number" id="smtp_port" name="smtp_port" required value="993">
+                </div>
+            </div>
+            
+            <div class="provider-shortcuts">
+                <p>Common Providers:</p>
+                <button type="button" class="provider-btn" data-server="smtp.gmail.com" data-port="993">Gmail</button>
+                <button type="button" class="provider-btn" data-server="smtp.office365.com" data-port="993">Outlook</button>
+                <button type="button" class="provider-btn" data-server="smtp.mail.yahoo.com" data-port="993">Yahoo</button>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Connect and Scan</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="connection-info">
+        <h3>What happens next?</h3>
+        <ol>
+            <li>We'll securely connect to your email server</li>
+            <li>Analyze your emails to identify services that have contacted you</li>
+            <li>Show you a list of services for which we can send GDPR requests</li>
+            <li>You'll select which services you want to forget about you</li>
+        </ol>
+        
+        <div class="info-box">
+            <h4>Your Privacy Matters</h4>
+            <p>We take your privacy seriously. Your email credentials are used only for the duration of the scanning process and are never stored on our servers.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for provider shortcut buttons
+    const providerBtns = document.querySelectorAll('.provider-btn');
+    providerBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('smtp_server').value = this.getAttribute('data-server');
+            document.getElementById('smtp_port').value = this.getAttribute('data-port');
+        });
+    });
+});
+</script>
+{% endblock %} 

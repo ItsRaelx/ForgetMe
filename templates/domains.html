@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Select Domains - ForgetMe{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Found Services</h1>
+    <p class="lead">We found these services that have contacted {{ email }}. Select the ones you want to forget about you.</p>
+</section>
+
+{% if domains %}
+<section class="domains-list">
+    <form action="/send-requests" method="post">
+        <div class="domain-controls">
+            <div class="selection-actions">
+                <button type="button" id="select-all" class="btn btn-secondary btn-sm">Select All</button>
+                <button type="button" id="deselect-all" class="btn btn-secondary btn-sm">Deselect All</button>
+            </div>
+            <div class="search-filter">
+                <input type="text" id="domain-search" placeholder="Filter domains...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        
+        <div class="domains-grid">
+            {% for domain in domains %}
+            <div class="domain-card">
+                <div class="domain-checkbox">
+                    <input type="checkbox" id="domain-{{ loop.index }}" name="selected_domains" value="{{ domain }}" checked>
+                    <label for="domain-{{ loop.index }}"></label>
+                </div>
+                <div class="domain-icon">
+                    <img src="https://www.google.com/s2/favicons?domain={{ domain }}" alt="{{ domain }} icon" onerror="this.src='/static/img/default-icon.png'">
+                </div>
+                <div class="domain-info">
+                    <h3>{{ domain }}</h3>
+                    <div class="domain-actions">
+                        <a href="https://{{ domain }}" target="_blank" class="domain-link" title="Visit website">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <a href="https://{{ domain }}/privacy" target="_blank" class="domain-privacy" title="View privacy policy">
+                            <i class="fas fa-shield-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-actions">
+            <p class="selected-count"><span id="selected-count">{{ domains|length }}</span> domains selected</p>
+            <button type="submit" class="btn btn-primary">Send GDPR Requests</button>
+        </div>
+    </form>
+</section>
+{% else %}
+<section class="empty-state">
+    <div class="empty-icon">
+        <i class="fas fa-inbox"></i>
+    </div>
+    <h2>No domains found</h2>
+    <p>We couldn't find any email domains in your account. This could be because:</p>
+    <ul>
+        <li>Your email account is new or has very few messages</li>
+        <li>There was an issue connecting to your email server</li>
+        <li>Email scanning permission was restricted</li>
+    </ul>
+    <a href="/connect" class="btn btn-primary">Try Again</a>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllBtn = document.getElementById('select-all');
+    const deselectAllBtn = document.getElementById('deselect-all');
+    const domainSearch = document.getElementById('domain-search');
+    const domainCards = document.querySelectorAll('.domain-card');
+    const checkboxes = document.querySelectorAll('input[name="selected_domains"]');
+    const selectedCount = document.getElementById('selected-count');
+    
+    // Function to update selected count
+    function updateSelectedCount() {
+        const selected = document.querySelectorAll('input[name="selected_domains"]:checked').length;
+        selectedCount.textContent = selected;
+    }
+    
+    // Select all functionality
+    if (selectAllBtn) {
+        selectAllBtn.addEventListener('click', function() {
+            checkboxes.forEach(checkbox => {
+                const card = checkbox.closest('.domain-card');
+                if (card.style.display !== 'none') {
+                    checkbox.checked = true;
+                }
+            });
+            updateSelectedCount();
+        });
+    }
+    
+    // Deselect all functionality
+    if (deselectAllBtn) {
+        deselectAllBtn.addEventListener('click', function() {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedCount();
+        });
+    }
+    
+    // Filter domains by search
+    if (domainSearch) {
+        domainSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            domainCards.forEach(card => {
+                const domain = card.querySelector('h3').textContent.toLowerCase();
+                if (domain.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Update count when checkboxes change
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Request Results - ForgetMe{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>GDPR Request Results</h1>
+    <p class="lead">We've processed your GDPR data removal requests. Here are the results:</p>
+</section>
+
+<section class="results-container">
+    <div class="results-summary">
+        <div class="result-stat">
+            <div class="stat-number">{{ results|length }}</div>
+            <div class="stat-label">Total Requests</div>
+        </div>
+        <div class="result-stat success">
+            <div class="stat-number">{{ results.values()|selectattr('startswith', 'Request sent')|list|length }}</div>
+            <div class="stat-label">Successful</div>
+        </div>
+        <div class="result-stat failed">
+            <div class="stat-number">{{ results.values()|rejectattr('startswith', 'Request sent')|list|length }}</div>
+            <div class="stat-label">Failed</div>
+        </div>
+    </div>
+    
+    <div class="results-list">
+        {% for domain, result in results.items() %}
+        <div class="result-card {% if result.startswith('Request sent') %}success{% else %}failed{% endif %}">
+            <div class="result-icon">
+                {% if result.startswith('Request sent') %}
+                <i class="fas fa-check-circle"></i>
+                {% elif result.startswith('No privacy') %}
+                <i class="fas fa-question-circle"></i>
+                {% else %}
+                <i class="fas fa-exclamation-circle"></i>
+                {% endif %}
+            </div>
+            <div class="result-content">
+                <h3>{{ domain }}</h3>
+                <p>{{ result }}</p>
+                {% if result.startswith('No privacy') %}
+                <div class="manual-instructions">
+                    <p>You can try to find their privacy contact manually:</p>
+                    <a href="https://{{ domain }}/privacy" target="_blank" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-external-link-alt"></i> Check Privacy Policy
+                    </a>
+                    <a href="https://{{ domain }}/contact" target="_blank" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-envelope"></i> Contact Page
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="results-actions">
+        <p>GDPR requests can take up to 30 days to be processed by the organizations.</p>
+        <a href="/" class="btn btn-primary">Back to Home</a>
+        <a href="/connect" class="btn btn-secondary">Scan Another Account</a>
+    </div>
+    
+    <div class="gdpr-info">
+        <h3>What happens next?</h3>
+        <ol>
+            <li>Companies that received your request are legally obligated under GDPR to respond within 30 days</li>
+            <li>Some may contact you to verify your identity</li>
+            <li>Once verified, they must delete all your personal data from their systems</li>
+            <li>They should send you confirmation when the erasure is complete</li>
+        </ol>
+        
+        <div class="info-box">
+            <h4>Did you know?</h4>
+            <p>Under GDPR Article 17, EU residents have the "right to be forgotten" which allows them to request erasure of their personal data from organizations. Organizations must comply without undue delay (usually within 30 days).</p>
+        </div>
+    </div>
+</section>
+{% endblock %} 

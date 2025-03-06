@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  forgetme:
+    build: .
+    container_name: forgetme
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    restart: unless-stopped 

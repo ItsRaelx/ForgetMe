@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}ForgetMe - Take Control of Your Online Privacy{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Take Control of Your Online Privacy</h1>
+        <p class="lead">ForgetMe helps you send GDPR data removal requests to services that have your data.</p>
+        <div class="cta-buttons">
+            <a href="/connect" class="btn btn-primary">Get Started</a>
+            <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="{{ url_for('static', path='/img/privacy.svg') }}" alt="Privacy Illustration" onerror="this.style.display='none'">
+    </div>
+</section>
+
+<section id="how-it-works" class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Connect Your Email</h3>
+            <p>Securely connect to your email account to identify services that have contacted you.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>Discover Services</h3>
+            <p>We identify the companies and services that have your personal data.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <h3>Send Requests</h3>
+            <p>Automatically send GDPR data removal requests to selected services.</p>
+        </div>
+        <div class="step">
+            <div class="step-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Regain Privacy</h3>
+            <p>Get confirmation when your data has been removed from their systems.</p>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+        <div class="feature">
+            <i class="fas fa-shield-alt"></i>
+            <h3>GDPR Compliant</h3>
+            <p>Our requests are fully compliant with GDPR Article 17 - Right to Erasure.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-lock"></i>
+            <h3>Secure by Design</h3>
+            <p>Your email credentials are never stored and used only for scanning.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-sliders-h"></i>
+            <h3>Full Control</h3>
+            <p>You decide which services to contact and which requests to send.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-chart-line"></i>
+            <h3>Track Progress</h3>
+            <p>Monitor the status of your data removal requests.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>Ready to Take Control of Your Data?</h2>
+    <p>Start by connecting your email account to discover which services have your data.</p>
+    <a href="/connect" class="btn btn-primary">Get Started Now</a>
+</section>
+{% endblock %} 
